@@ -5,12 +5,14 @@ import java.util.List;
 
 @Service
 public class ItemService {
+
+    private final ItemRepository itemRepository;
+
+    public ItemService(ItemRepository itemRepository) {
+        this.itemRepository = itemRepository;
+    }
+
     public List<Item> getItems() {
-        return List.of(
-                new Item (
-                        1L,
-                        "study Springboot"
-                )
-        );
+        return itemRepository.findAll();
     }
 }
