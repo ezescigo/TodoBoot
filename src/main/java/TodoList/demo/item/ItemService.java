@@ -1,6 +1,8 @@
 package TodoList.demo.item;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 
 @Service
@@ -18,6 +20,19 @@ public class ItemService {
 
     public void createNewItem(Item item) {
         itemRepository.save(item);
+    }
+
+    @Transactional
+    public void updateItem(Long itemId, Item patch) {
+        Item item = itemRepository.findById(itemId)
+                .orElseThrow(() -> new IllegalStateException("item with id " + itemId + " does not exists."));
+
+        String description = patch.getDescription();
+
+        if (description != null &&
+                description.length() > 0) {
+            item.setDescription(item.getDescription());
+        }
     }
 
     public void deleteItem(Long itemId) {
