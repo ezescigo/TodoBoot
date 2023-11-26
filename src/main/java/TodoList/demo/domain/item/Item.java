@@ -1,5 +1,6 @@
-package TodoList.demo.item;
+package TodoList.demo.domain.item;
 
+import TodoList.demo.enums.Status;
 import jakarta.persistence.*;
 
 @Entity
@@ -17,19 +18,30 @@ public class Item {
             generator = "item_sequence"
     )
     private Long id;
+    private String title;
     private String description;
+
+    @Enumerated
+    @Column(name = "status", length = 4)
+    private Status status;
 
     public Item() {
     }
 
     public Item(Long id,
-                String description) {
+                String title,
+                String description,
+                Status status) {
         this.id = id;
+        this.title = title;
         this.description = description;
+        this.status = status;
     }
 
-    public Item(String description) {
+    public Item(String title, String description, Status status) {
         this.description = description;
+        this.title = title;
+        this.status = status;
     }
 
     public Long getId() {
@@ -40,6 +52,14 @@ public class Item {
         this.id = id;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
     public String getDescription() {
         return description;
     }
@@ -48,11 +68,21 @@ public class Item {
         this.description = description;
     }
 
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
     @Override
     public String toString() {
         return "Item{" +
                 "id=" + id +
+                ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
+                ", status=" + status +
                 '}';
     }
 }

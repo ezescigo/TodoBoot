@@ -1,5 +1,9 @@
-package TodoList.demo.item;
+package TodoList.demo.services;
 
+import TodoList.demo.Exception.ItemNotFoundException;
+import TodoList.demo.domain.item.Item;
+import TodoList.demo.domain.item.ItemRepository;
+import TodoList.demo.enums.Status;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,8 +18,14 @@ public class ItemService {
         this.itemRepository = itemRepository;
     }
 
-    public List<Item> getItems() {
-        return itemRepository.findAll();
+    public List<Item> getItems(Status status) {
+        return itemRepository.getAllFiltered(status);
+//        return itemRepository.findAll();
+    }
+
+    public Item getItem(Long itemId) {
+        return itemRepository.findById(itemId)
+                .orElseThrow(() -> new ItemNotFoundException("Item with id " + itemId + " not found."));
     }
 
     public void createNewItem(Item item) {
@@ -25,7 +35,7 @@ public class ItemService {
     @Transactional
     public void updateItem(Long itemId, Item patch) {
         Item item = itemRepository.findById(itemId)
-                .orElseThrow(() -> new IllegalStateException("item with id " + itemId + " does not exists."));
+                .orElseThrow(() -> new ItemNotFoundException("Item with id " + itemId + " not found."));
 
         String description = patch.getDescription();
 

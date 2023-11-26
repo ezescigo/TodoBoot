@@ -1,7 +1,9 @@
-package TodoList.demo.item;
+package TodoList.demo.controllers;
 
+import TodoList.demo.domain.item.Item;
+import TodoList.demo.enums.Status;
+import TodoList.demo.services.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,8 +20,13 @@ public class ItemController {
     }
 
     @GetMapping
-    public List<Item> getItems() {
-        return itemService.getItems();
+    public List<Item> getItems(@RequestParam(value = "status", required = false) Status status) {
+        return itemService.getItems(status);
+    }
+
+    @GetMapping(path = "{itemId}")
+    public Item getItem(@PathVariable("itemId") Long itemId) {
+        return itemService.getItem(itemId);
     }
 
     @PostMapping
